@@ -11,10 +11,10 @@ const modalRoot = document.querySelector('#modal-root');
 const Modal = ({onClose, children}) => {
     // eslint-disable-next-line
     const closeModal = ({target, currentTarget, code}) => {
-        if(target === currentTarget || code === "Escape") {   
+        if (target === currentTarget || code === "Escape") {   
             onClose();
         }
-    }
+    };
 
     useEffect(() => {
         document.addEventListener("keydown", closeModal);

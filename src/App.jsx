@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect} from 'react';
 
 import SearchBar from './modules/SearchBar';
 import ImageGallery from './modules/ImageGallery';
@@ -31,7 +31,7 @@ const App = () => {
           setLoading(true);
           const data = await searchImages(search, page);
           setItems(prevItems => ([...prevItems, ...data.hits]));
-          console.log(data);
+
           if (totalHits === null) {
             setTotalHits(prevTotalHits => data.totalHits);
           }
@@ -54,15 +54,15 @@ const App = () => {
     setTotalHits(null);
   }
 
-  const loadMore = useCallback(() => {
+  const loadMore = () => {
     setPage(prevPage => prevPage + 1);
     setTotalHits(prevTotalHits => prevTotalHits - 12);
-  }, [])
+  }
 
-  const closeModal = useCallback(() => {
+  const closeModal = () => {
     setDetails(null);
     setShowModal(false);
-  }, [])
+  }
 
   const showImage = ({tags, largeImageURL}) => {
     setDetails({tags, largeImageURL});
