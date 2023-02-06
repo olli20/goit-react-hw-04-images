@@ -76,20 +76,6 @@ const App = () => {
 export default App;
 
 
-
-// import {Component} from 'react';
-
-// import SearchBar from './modules/SearchBar';
-// import ImageGallery from './modules/ImageGallery';
-// import Button from './shared/components/Button';
-// import Modal from './shared/components/Modal';
-// import Loader from './shared/components/Loader';
-// import Message from './shared/components/Message';
-
-// import {searchImages} from './shared/services/gallery-api';
-
-// import styles from './app.module.scss';
-
 // class App extends Component {
 //   state = {
 //     search: "",
@@ -170,5 +156,3 @@ export default App;
 //     )
 //   }
 // }
-
-// export default App;
