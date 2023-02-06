@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect} from 'react';
 
 import SearchBar from './modules/SearchBar';
 import ImageGallery from './modules/ImageGallery';
@@ -19,17 +19,26 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [details, setDetails] = useState(null);
+  const [totalHits, setTotalHits] = useState(null);
 
   useEffect(() => {
     if(!search) {
       return;
-    } 
+    }
+
+    const resetTotalHits = (newTotalHits) => {
+      if(totalHits === null) {
+        setTotalHits(newTotalHits);
+      }
+    }
+
     const fetchImages = async () => {
         try {
           setLoading(true);
           const data = await searchImages(search, page);
           
           setItems(prevItems => ([...prevItems, ...data.hits]));
+          resetTotalHits(data.totalHits);
         }
         catch(error) {
           setError(error.message);
@@ -39,22 +48,25 @@ const App = () => {
         }
     }
     fetchImages();
-  }, [search, page, setLoading, setItems, setError])
-
+  }, // eslint-disable-next-line
+  [search, page, setLoading, setTotalHits, setItems, setError]);
+ 
   const onSearchImages = ({search}) => {
     setSearch(search);
     setItems([]); 
-    setPage(1) 
+    setPage(1);
+    setTotalHits(null);
   }
 
-  const loadMore = useCallback(() => {
+  const loadMore = () => {
     setPage(prevPage => prevPage + 1);
-  }, []);
+    setTotalHits(prevTotalHits => prevTotalHits - 12);
+  }
 
-  const closeModal = useCallback(() => {
+  const closeModal = () => {
     setDetails(null);
     setShowModal(false);
-  }, []);
+  }
 
   const showImage = ({tags, largeImageURL}) => {
     setDetails({tags, largeImageURL});
@@ -67,7 +79,7 @@ const App = () => {
         <SearchBar onSubmit={onSearchImages} />
         <ImageGallery items={items} showImage={showImage} />
         {loading && <Loader />}
-        {Boolean(items.length) && <Button onClick={loadMore}>Load more</Button>}
+        {(totalHits >= 12) && <Button onClick={loadMore}>Load more</Button>}
         {error && <Message text="Something went wrong..." />}
       </div>
   )
@@ -75,6 +87,20 @@ const App = () => {
 
 export default App;
 
+
+
+// import {Component} from 'react';
+
+// import SearchBar from './modules/SearchBar';
+// import ImageGallery from './modules/ImageGallery';
+// import Button from './shared/components/Button';
+// import Modal from './shared/components/Modal';
+// import Loader from './shared/components/Loader';
+// import Message from './shared/components/Message';
+
+// import {searchImages} from './shared/services/gallery-api';
+
+// import styles from './app.module.scss';
 
 // class App extends Component {
 //   state = {
@@ -156,3 +182,5 @@ export default App;
 //     )
 //   }
 // }
+
+// export default App;
