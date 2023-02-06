@@ -4,7 +4,7 @@ import styles from './image-gallery-item.module.scss';
 
 const ImageGalleryItem = ({tags, webformatURL, largeImageURL, showImage}) => {
     return (
-        <li onClick={() => showImage(tags, largeImageURL)} className={styles.item}>
+        <li onClick={() => showImage({tags, largeImageURL})} className={styles.item}>
             <img className={styles.image} src={webformatURL} alt={tags} />
         </li>
     )
