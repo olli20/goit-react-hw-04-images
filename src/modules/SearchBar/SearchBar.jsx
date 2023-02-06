@@ -1,3 +1,5 @@
+import {memo} from 'react';
+
 import PropTypes from 'prop-types';
 
 import { IoSearchSharp } from "react-icons/io5";
@@ -26,7 +28,7 @@ const SearchBar = ({onSubmit}) => {
     )
 } 
 
-export default SearchBar;
+export default memo(SearchBar);
 
 SearchBar.propTypes = {
     onSubmit: PropTypes.func.isRequired,

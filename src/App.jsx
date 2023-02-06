@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 
 import SearchBar from './modules/SearchBar';
 import ImageGallery from './modules/ImageGallery';
@@ -47,27 +47,27 @@ const App = () => {
   }, // eslint-disable-next-line
   [search, page, setLoading, setTotalHits, setItems, setError]);
  
-  const onSearchImages = ({search}) => {
+  const onSearchImages = useCallback(({search}) => {
     setSearch(search);
     setItems([]); 
     setPage(1);
     setTotalHits(null);
-  }
+  }, [])
 
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     setPage(prevPage => prevPage + 1);
     setTotalHits(prevTotalHits => prevTotalHits - 12);
-  }
+  }, [])
 
   const closeModal = () => {
     setDetails(null);
     setShowModal(false);
   }
 
-  const showImage = ({tags, largeImageURL}) => {
+  const showImage = useCallback(({tags, largeImageURL}) => {
     setDetails({tags, largeImageURL});
     setShowModal(true);
-  }
+  }, [])
 
   return (
       <div className={styles.app}>

@@ -1,3 +1,5 @@
+import {memo} from 'react';
+
 import PropTypes from 'prop-types';
 
 import styles from './button.module.scss';
@@ -10,7 +12,7 @@ const Button = ({children, type, onClick}) => {
     )
 }
 
-export default Button;
+export default memo(Button);
 
 Button.defaultProps = {
     type: "button",
