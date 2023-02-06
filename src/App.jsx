@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 
 import SearchBar from './modules/SearchBar';
 import ImageGallery from './modules/ImageGallery';
@@ -14,31 +14,27 @@ import styles from './app.module.scss';
 const App = () => {
   const [search, setSearch] = useState("");
   const [items, setItems] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalHits, setTotalHits] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [details, setDetails] = useState(null);
-  const [totalHits, setTotalHits] = useState(null);
 
   useEffect(() => {
     if(!search) {
       return;
     }
 
-    const resetTotalHits = (newTotalHits) => {
-      if(totalHits === null) {
-        setTotalHits(newTotalHits);
-      }
-    }
-
     const fetchImages = async () => {
         try {
           setLoading(true);
           const data = await searchImages(search, page);
-          
           setItems(prevItems => ([...prevItems, ...data.hits]));
-          resetTotalHits(data.totalHits);
+          console.log(data);
+          if (totalHits === null) {
+            setTotalHits(prevTotalHits => data.totalHits);
+          }
         }
         catch(error) {
           setError(error.message);
@@ -58,15 +54,15 @@ const App = () => {
     setTotalHits(null);
   }
 
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     setPage(prevPage => prevPage + 1);
     setTotalHits(prevTotalHits => prevTotalHits - 12);
-  }
+  }, [])
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setDetails(null);
     setShowModal(false);
-  }
+  }, [])
 
   const showImage = ({tags, largeImageURL}) => {
     setDetails({tags, largeImageURL});
